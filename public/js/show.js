@@ -546,7 +546,7 @@ var controller = (function(Dom, storage){
        
         }
         cart();
-        
+        addAndSub();
         
 
     }

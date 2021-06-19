@@ -21,9 +21,11 @@
 
 @yield('content')
 
+
 @include('partials.footer')
 
 <script src="/js/fontawesome.js"></script>
 @yield('scripts')
+
 </body>
 </html>
