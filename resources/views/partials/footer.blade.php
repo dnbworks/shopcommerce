@@ -94,17 +94,10 @@
                     
                     
                 </div>
-                <div class="checkout" >
-                    <!-- <form action="/" method="post">
-                        @csrf
-                        <input type="hidden" name="order" value="" id="order">
-                        <button type="submit">CheckOut</a>
-                    </form> -->
-                    <a href="{{ route('login') }}">Proceed to checkout</a>
-                </div> 
             </div>
             <div class="col-12 col-md-4 col-lg-4">
                 <div class="cart-summary">
+                    <p>Cart summary</p>
                     <div class="subTotal">
                         <span>Sub Total: </span>
                         <span>PHP 50 </span>
@@ -113,11 +106,20 @@
                         <span>Shipping: </span>
                         <span>PHP 50 </span>
                     </div>
-                    <div class="shipping">
+                    <div class="total">
                         <span>Total: </span>
                         <span>PHP 50 </span>
                     </div>
                 </div>
+                <div class="checkout" >
+                    <!-- <form action="/" method="post">
+                        @csrf
+                        <input type="hidden" name="order" value="" id="order">
+                        <button type="submit">CheckOut</a>
+                    </form> -->
+                    <a href="http://127.0.0.1:8000/account/login">Proceed to checkout</a>
+                </div> 
+             
             </div>
             
         </div>

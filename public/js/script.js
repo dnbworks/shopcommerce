@@ -202,13 +202,13 @@ var controller = (function(Dom, storage){
                 
                 
                 emptycart.style.display = "block";
-                cartRow.style.display = "none";
+              
            
         } else {
             var emptycart = document.querySelector(".empty-cart"),
             cartRow = document.querySelector(".cart-row-container");
             emptycart.style.display = "none";
-            cartRow.style.display = "block";
+         
         }
         
         addAndSub();

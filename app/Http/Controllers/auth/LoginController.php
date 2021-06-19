@@ -16,7 +16,8 @@ class LoginController extends Controller
         if(!$request->checkout){
             return view('auth.login');
         } 
-        return view('auth.login', ['Fromcheckout' => $request->checkout]);
+
+        return view('auth.login', ['Fromcheckout' => $request->checkout, 'checkoutData' => json_encode($request->checkout)]);
     }
 
     public function store(Request $request){

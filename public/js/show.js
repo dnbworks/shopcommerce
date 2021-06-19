@@ -16,7 +16,16 @@ var nameLink = new URLSearchParams(window.location.pathname);
 //     // } 
 
     
-// }        
+// }    
+
+function Item(id, image, itemname, price, quantity, size){
+    this.id = id; 
+    this.image = image;
+    this.itemname = itemname;
+    this.price = price;
+    this.quantity = quantity;
+    this.size = size;
+}
         
 var storage = {
     AccessLocalStorage: {
@@ -31,14 +40,7 @@ var storage = {
         }
     },
 
-    Item(id, image, itemname, price, quantity, size){
-        this.id = id; 
-        this.image = image;
-        this.itemname = itemname;
-        this.price = price;
-        this.quantity = quantity;
-        this.size = size;
-    },
+   
 
     addToCart: function(img, name, prx, qua, size){
         let addedItem, itemId, addtoStore, LocStore;
@@ -49,7 +51,7 @@ var storage = {
             itemId = 0;
         }
         
-        addedItem = new this.Item(itemId, img, name, prx, qua, size);
+        addedItem = new Item(itemId, img, name, prx, qua, size);
         LocStore = this.AccessLocalStorage.GetLocalStorage();
         LocStore.push(addedItem);
         this.AccessLocalStorage.SetLocalStorage(LocStore);
@@ -62,6 +64,9 @@ var storage = {
 if(storage.AccessLocalStorage.GetLocalStorage() === null){
     storage.AccessLocalStorage.SetLocalStorage([]);
 }
+
+var totalItems = Array.from(document.querySelectorAll(".item-container"));
+console.log(totalItems);
 
 var view = {
     menuBtns: Array.from(document.querySelectorAll(".bar-container")),
@@ -94,8 +99,8 @@ var view = {
     add: document.querySelector("#add"),
     sub: document.querySelector("#sub"),
     number: document.querySelector("#numbers"),
-    totalNumItems:document.querySelectorAll(".item-container"),
-    digits: Array.from(document.querySelectorAll(".digit")),
+    totalItems:document.querySelectorAll(".item-container"),
+    digit: document.querySelector(".digit"),
    
     
     addLocalCart:document.querySelector(".add"),
@@ -139,9 +144,10 @@ var view = {
     },
 
     numofitemsIncart: function(){
-        iew.digits.forEach(function(digit){
-            view.textContent = Array.from(view.totalNumItems).length;
-        });
+    
+        this.digit.textContent = JSON.parse(localStorage.getItem('cart')).length;
+        
+      
     }
 
 }
@@ -152,8 +158,427 @@ var view = {
         
  
 var controller = function(){
+
+    view.numofitemsIncart();
+
+    function updateNumCart(){
+        let digits = Array.from(document.querySelectorAll(".digit")),   
+            totalNumItems = document.querySelectorAll(".item-container");
+
+            digits.forEach(function(digit){
+                digit.textContent = Array.from(totalNumItems).length;
+        });
+
+        if(Array.from(totalNumItems).length === 0){
+            
+            var emptycart = document.querySelector(".empty-cart"),
+                cartRow = document.querySelector(".cart-row-container");
+                
+                
+                emptycart.style.display = "block";
+             
+           
+        } else {
+            var emptycart = document.querySelector(".empty-cart"),
+            cartRow = document.querySelector(".cart-row-container");
+            emptycart.style.display = "none";
+       
+        }
+     
+     
+        selectQuantity();
+
+    }
+
+    function selectQuantity(){
+        
+        var addbtns = document.querySelectorAll(".Shopping-cart .addbtns");
+        var subbtns = document.querySelectorAll(".Shopping-cart .subbtns");
+
+
+        Array.from(addbtns).forEach(function(btn){
+
+            btn.addEventListener("click", function(e){
+            e.preventDefault();
+      
+            let value = this.parentElement.parentElement.previousElementSibling;
+            let numberText = this.nextElementSibling;
+            // let cash = parseFloat(value.textContent.substring(1,6));
+            let cash = parseInt(value.textContent.slice(3));
+
+
+            let span = this.parentElement.parentElement.nextElementSibling.lastChild;
+
+            let plus;
+
+            var shopcart = storage.AccessLocalStorage.GetLocalStorage();
+
+            var product = shopcart.find(item => item.id == this.parentElement.id );
+
+
+            if(!(parseInt(numberText.textContent) >= 12)){
+            plus =  parseInt(numberText.textContent) + 1;
+            numberText.textContent = plus;
+
+            product.quantity = parseInt(numberText.textContent);
+            let TotalCost = parseFloat(this.parentElement.parentElement.nextElementSibling.lastChild.textContent);
+
+            span.innerText = (cash * plus).toFixed(2);
+
+
+            } 
+
+            storage.AccessLocalStorage.SetLocalStorage(shopcart);
+
+            });
+        });
+
+        Array.from(subbtns).forEach(function(btn){
+
+            btn.addEventListener("click", function(e){
+                e.preventDefault();
+
+                let value = this.parentElement.parentElement.previousElementSibling;
+                let numberText = this.nextElementSibling.nextElementSibling;
+                let numberTextContent = parseInt(this.nextElementSibling.nextElementSibling.textContent);
+                let cash = parseInt(value.textContent.slice(3));
+
+                // console.log(this.nextElementSibling.nextElementSibling.textContent);
+
+                var shopcart = storage.AccessLocalStorage.GetLocalStorage();
+
+                var product = shopcart.find(item => item.id == this.parentElement.id );
+
+
+                if(!(numberTextContent <= 1)){
+                    let minus =  parseInt(numberText.textContent) - 1;
+                    numberText.textContent = minus;
+
+                    product.quantity = parseInt(numberText.textContent);
+
+                    let TotalCost = parseFloat(this.parentElement.parentElement.nextElementSibling.lastChild.textContent);
+                    let span = this.parentElement.parentElement.nextElementSibling.lastChild;
+
+                    span.innerText = (parseFloat(span.textContent) - cash).toFixed(2);
+
+                } 
+
+                storage.AccessLocalStorage.SetLocalStorage(shopcart);
+
+
+            });
+        });
+    }
+
+    selectQuantity();
+
+    view.item.addEventListener("click", function(e){
+        e.preventDefault();
+           var elname = e.target, elid, cart = storage.AccessLocalStorage.GetLocalStorage();
+          
+       if(elname.className === "closed"){
+           
+           elid = elname.getAttribute("id");
+           var position;
+                
+            cart = cart.filter((item) => item.id != elid );
+
     
+           storage.AccessLocalStorage.SetLocalStorage(cart);
+           view.updateCart(storage.AccessLocalStorage.GetLocalStorage());
+           updateNumCart();
+          
+
+        }
+
+   });
+
+//   view.item.addEventListener("click", function(e){
+//         e.preventDefault();
+//         var elname = e.target, elid, cart = storage.AccessLocalStorage.GetLocalStorage();
+        
+//         if(elname.className === "closed"){
+            
+//             elid = elname.getAttribute("id");
+//             var position;
+                    
+        
+//             for(var i = 0; i < cart.length; i++){
+                    
+//                 if(elid == cart[i].id){
+//                     position = i;
+//                     // console.log(elid);
+                    
+//                 }
+
+//             }
+
+//             cart.splice(position, 1);
+//             storage.AccessLocalStorage.SetLocalStorage(cart);
+//             view.updateCart(storage.AccessLocalStorage.GetLocalStorage());
+//             updateNumCart();
+            
+
+//         }
+
+//     });
+
+    view.menuBtns.forEach((menuBtn) => {
+        menuBtn.addEventListener("click", function(e){
+            e.preventDefault();
+            view.sidenav.classList.add("show");
+        });
+    });
+    
+    
+    view.closeMenubtn.addEventListener("click", function(e){
+        e.preventDefault();
+        view.sidenav.classList.remove("show");
+    });
+
+ 
+
+
+    view.add.addEventListener("click", function(e){
+        e.preventDefault();
+        let value = view.numberText();
+        if(!(value >= 12)){
+            let plus = value + 1;
+            view.number.textContent = plus;
+        } else{
+            value = 0;
+            plus = value + 1;
+            view.number.textContent = plus;
+        }
+        
+    });
+    
+    view.sub.addEventListener("click", function(e){
+        e.preventDefault();
+        let value = view.numberText();
+        if(!(value <= 1)){
+            let minus = value - 1;
+            view.number.textContent = minus;
+        } else {
+            value = 13;
+            minus = value - 1;
+            view.number.textContent = minus;
+        }
+    });
+
+    view.baskets.forEach(function(basket){
+        basket.addEventListener("click", function(e){
+            e.preventDefault();
+            view.cart.classList.add("showcart");
+        });
+
+    });
+    
+    
+    view.barbacks.addEventListener("click", function(e){
+        e.preventDefault();
+        view.cart.classList.remove("showcart");
+    });
+
+
+    var products;
+
+    window.onload = function(){
+        products = JSON.parse(document.querySelector('.data').dataset.products);
+        console.log(products);
+
+        
+    }
+    
+
+    
+    
+
+    var storedItems;
+    storedItems = storage.AccessLocalStorage.GetLocalStorage();
+    view.updateCart(storedItems);
+    view.addLocalCart.addEventListener("click", function(e){
+        e.preventDefault();
+        
+        var name = view.itemName.textContent;
+        var price = view.prices.textContent;
+        var Quantitys = parseInt(view.number.textContent);
+        var picdetails = view.picture.src;
+        var size = document.querySelector('.size .color').textContent;
+
+
+        
+        var itemInLocalStorage = storage.AccessLocalStorage.GetLocalStorage();
+
+        if(itemInLocalStorage.length === 0){
+
+            var checkbooleans = storage.addToCart(picdetails, name, price, Quantitys, size);
+            updateDom();
+            
+            view.alreadyincart.classList.add("block");
+            view.paragraphText.textContent = "Item added to your cart";
+            
+            view.detail.scrollTo({
+               top:0,
+               lett:0,
+               behavior: "smooth"
+            });
+            
+            setTimeout(() => {
+               view.alreadyincart.classList.remove("block");
+            }, 3000);
+            
+
+        } 
+
+        if(itemInLocalStorage.length > 0){
+            function putToCart(){
+                for(var i = 0; i<storage.AccessLocalStorage.GetLocalStorage().length; i++){
+                    if(name === storage.AccessLocalStorage.GetLocalStorage()[i].itemname){
+                        return true;
+                    }      
+                }
+                return false;
+            }
+
+            var checkputtocart = putToCart();
+
+            if(checkputtocart){
+                // alert("already in cart");
+                view.alreadyincart.classList.add("block");
+                view.paragraphText.textContent = "Item is already in cart";
+                window.scrollTo({
+                  top:0,
+                  lett:0,
+                  behavior: "smooth"
+                });
+                setTimeout(() => {
+                    view.alreadyincart.classList.remove("block");
+                }, 3000);
+                
+            } else {
+                var checkbooleans = storage.addToCart(picdetails, name, price, Quantitys, size);
+                
+                updateDom();
+                
+                view.alreadyincart.classList.add("block");
+                view.paragraphText.textContent = "Item added to your cart";
+                
+                window.scrollTo({
+                   top:0,
+                   lett:0,
+                   behavior: "smooth"
+                });
+                
+                setTimeout(() => {
+                   view.alreadyincart.classList.remove("block");
+                }, 3000);
+                
+            }
+    
+        }
+            
+        
+        function updateDom(){
+            if(checkbooleans){
+                view.updateCart(storage.AccessLocalStorage.GetLocalStorage());
+                
+            }
+            updateNumCart();
+            
+            
+        }
+        
+        
+                
+    });
+
+   
+
+    console.log('hi');
+
+    var addbtns = document.querySelectorAll(".Shopping-cart .addbtns");
+        var subbtns = document.querySelectorAll(".Shopping-cart .subbtns");
+
+
+        Array.from(addbtns).forEach(function(btn){
+
+            btn.addEventListener("click", function(e){
+            e.preventDefault();
+      
+            let value = this.parentElement.parentElement.previousElementSibling;
+            let numberText = this.nextElementSibling;
+            // let cash = parseFloat(value.textContent.substring(1,6));
+            let cash = parseInt(value.textContent.slice(3));
+
+
+            let span = this.parentElement.parentElement.nextElementSibling.lastChild;
+
+            let plus;
+
+            var shopcart = storage.AccessLocalStorage.GetLocalStorage();
+
+            var product = shopcart.find(item => item.id == this.parentElement.id );
+
+
+            if(!(parseInt(numberText.textContent) >= 12)){
+            plus =  parseInt(numberText.textContent) + 1;
+            numberText.textContent = plus;
+
+            product.quantity = parseInt(numberText.textContent);
+            let TotalCost = parseFloat(this.parentElement.parentElement.nextElementSibling.lastChild.textContent);
+
+            span.innerText = (cash * plus).toFixed(2);
+
+
+            } 
+
+            storage.AccessLocalStorage.SetLocalStorage(shopcart);
+
+            });
+        });
+
+        Array.from(subbtns).forEach(function(btn){
+
+            btn.addEventListener("click", function(e){
+                e.preventDefault();
+
+                let value = this.parentElement.parentElement.previousElementSibling;
+                let numberText = this.nextElementSibling.nextElementSibling;
+                let numberTextContent = parseInt(this.nextElementSibling.nextElementSibling.textContent);
+                let cash = parseInt(value.textContent.slice(3));
+
+                // console.log(this.nextElementSibling.nextElementSibling.textContent);
+
+                var shopcart = storage.AccessLocalStorage.GetLocalStorage();
+
+                var product = shopcart.find(item => item.id == this.parentElement.id );
+
+
+                if(!(numberTextContent <= 1)){
+                    let minus =  parseInt(numberText.textContent) - 1;
+                    numberText.textContent = minus;
+
+                    product.quantity = parseInt(numberText.textContent);
+
+                    let TotalCost = parseFloat(this.parentElement.parentElement.nextElementSibling.lastChild.textContent);
+                    let span = this.parentElement.parentElement.nextElementSibling.lastChild;
+
+                    span.innerText = (parseFloat(span.textContent) - cash).toFixed(2);
+
+                } 
+
+                storage.AccessLocalStorage.SetLocalStorage(shopcart);
+
+
+            });
+        });
+  
+
 }
+
+window.onload = controller;
+
 
 /*
 var localStorages = (function(){
@@ -207,324 +632,6 @@ var localStorages = (function(){
 */
 
 
-
-var controller = (function(Dom, storage){
-
-    function updateNumCart(){
-        let digits = Array.from(document.querySelectorAll(".digit")),   
-            totalNumItems = document.querySelectorAll(".item-container");
-
-            digits.forEach(function(digit){
-                digit.textContent = Array.from(totalNumItems).length;
-        });
-
-        if(Array.from(totalNumItems).length === 0){
-            
-            var emptycart = document.querySelector(".empty-cart"),
-                cartRow = document.querySelector(".cart-row-container");
-                
-                
-                emptycart.style.display = "block";
-             
-           
-        } else {
-            var emptycart = document.querySelector(".empty-cart"),
-            cartRow = document.querySelector(".cart-row-container");
-            emptycart.style.display = "none";
-       
-        }
-     
-     
-        selectQuantity();
-
-    }
-
-    function selectQuantity(){
-        
-        var addbtns = document.querySelectorAll(".Shopping-cart .addbtns");
-        var subbtns = document.querySelectorAll(".Shopping-cart .subbtns");
-
-
-        Array.from(addbtns).forEach(function(btn){
-
-            btn.addEventListener("click", function(e){
-            e.preventDefault();
-      
-            let value = this.parentElement.parentElement.previousElementSibling;
-            let numberText = this.nextElementSibling;
-            // let cash = parseFloat(value.textContent.substring(1,6));
-            let cash = parseInt(value.textContent.slice(3));
-
-
-            let span = this.parentElement.parentElement.nextElementSibling.lastChild;
-
-            let plus;
-
-            var shopcart = localStorages.store.GetLocalStorage();
-
-            var product = shopcart.find(item => item.id == this.parentElement.id );
-
-
-            if(!(parseInt(numberText.textContent) >= 12)){
-            plus =  parseInt(numberText.textContent) + 1;
-            numberText.textContent = plus;
-
-            product.quantity = parseInt(numberText.textContent);
-            let TotalCost = parseFloat(this.parentElement.parentElement.nextElementSibling.lastChild.textContent);
-
-            span.innerText = (cash * plus).toFixed(2);
-
-
-            } 
-
-            localStorages.store.SetLocalStorage(shopcart);
-
-            });
-        });
-
- 
-
-        Array.from(subbtns).forEach(function(btn){
-
-            btn.addEventListener("click", function(e){
-                e.preventDefault();
-
-                let value = this.parentElement.parentElement.previousElementSibling;
-                let numberText = this.parentElement.lastChild;
-                let numberTextContent = parseInt(this.parentElement.lastChild.textContent);
-                let cash = parseInt(value.textContent.slice(3));
-
-
-
-                var shopcart = localStorages.store.GetLocalStorage();
-
-                var product = shopcart.find(item => item.id == this.parentElement.id );
-
-
-                if(!(numberTextContent <= 1)){
-                    let minus =  parseInt(numberText.textContent) - 1;
-                    numberText.textContent = minus;
-
-                    product.quantity = parseInt(numberText.textContent);
-
-                    let TotalCost = parseFloat(this.parentElement.parentElement.nextElementSibling.lastChild.textContent);
-                    let span = this.parentElement.parentElement.nextElementSibling.lastChild;
-
-                    span.innerText = (parseFloat(span.textContent) - cash).toFixed(2);
-
-                } 
-
-                localStorages.store.SetLocalStorage(shopcart);
-
-
-            });
-        });
-    }
-
- 
-     Dom.hereEl.item.addEventListener("click", function(e){
-         e.preventDefault();
-            var elname = e.target, elid, cart = storage.store.GetLocalStorage();
-           
-        if(elname.className === "closed"){
-            
-            elid = elname.getAttribute("id");
-            var position;
-                 
-        
-            for(var i = 0; i < cart.length; i++){
-                 
-                if(elid == cart[i].id){
-                    position = i;
-                   // console.log(elid);
-                  
-                }
-
-            }
-
-            cart.splice(position, 1);
-            storage.store.SetLocalStorage(cart);
-            Dom.updateCart(storage.store.GetLocalStorage());
-            updateNumCart();
-           
-
-        }
-
-    });
-    
-   
-    Dom.hereEl.menuBtns.forEach((menuBtn) => {
-        menuBtn.addEventListener("click", function(e){
-            e.preventDefault();
-            Dom.hereEl.sidenav.classList.add("show");
-        });
-    });
-    
-    
-    Dom.hereEl.closeMenubtn.addEventListener("click", function(e){
-        e.preventDefault();
-        Dom.hereEl.sidenav.classList.remove("show");
-    });
-
- 
-
-
-    Dom.hereEl.add.addEventListener("click", function(e){
-        e.preventDefault();
-        let value = Dom.hereEl.numberText();
-        if(!(value >= 12)){
-            let plus = value + 1;
-            Dom.hereEl.number.textContent = plus;
-        } else{
-            value = 0;
-            plus = value + 1;
-            Dom.hereEl.number.textContent = plus;
-        }
-        
-    });
-    
-    Dom.hereEl.sub.addEventListener("click", function(e){
-        e.preventDefault();
-        let value = Dom.hereEl.numberText();
-        if(!(value <= 1)){
-            let minus = value - 1;
-            Dom.hereEl.number.textContent = minus;
-        } else {
-            value = 13;
-            minus = value - 1;
-            Dom.hereEl.number.textContent = minus;
-        }
-    });
-
-    Dom.hereEl.baskets.forEach(function(basket){
-        basket.addEventListener("click", function(e){
-            e.preventDefault();
-            Dom.hereEl.cart.classList.add("showcart");
-        });
-
-    });
-    
-    
-    Dom.hereEl.barbacks.addEventListener("click", function(e){
-        e.preventDefault();
-        Dom.hereEl.cart.classList.remove("showcart");
-    });
-
-    var products;
-    window.onload = function(){
-        
-        products = JSON.parse(document.querySelector('.data').dataset.products);
-        console.log(products);
-    }
-    Dom.numofitemsIncart();
-
-    var storedItems;
-    storedItems = storage.store.GetLocalStorage();
-    Dom.updateCart(storedItems);
-    Dom.hereEl.addLocalCart.addEventListener("click", function(e){
-        e.preventDefault();
-        
-        var name = Dom.hereEl.itemName.textContent;
-        var price = Dom.hereEl.prices.textContent;
-        var Quantitys = parseInt(Dom.hereEl.number.textContent);
-        var picdetails = Dom.hereEl.picture.src;
-        var size = document.querySelector('.size .color').textContent;
-
-
-        
-        var itemInLocalStorage = storage.store.GetLocalStorage();
-
-        if(itemInLocalStorage.length === 0){
-
-            var checkbooleans = storage.addToCart(picdetails, name, price, Quantitys, size);
-            updateDom();
-            
-            Dom.hereEl.alreadyincart.classList.add("block");
-            Dom.hereEl.paragraphText.textContent = "Item added to your cart";
-            
-            Dom.hereEl.detail.scrollTo({
-               top:0,
-               lett:0,
-               behavior: "smooth"
-            });
-            
-            setTimeout(() => {
-               Dom.hereEl.alreadyincart.classList.remove("block");
-            }, 3000);
-            
-
-        } 
-
-        if(itemInLocalStorage.length > 0){
-            function putToCart(){
-                for(var i = 0; i<storage.store.GetLocalStorage().length; i++){
-                    if(name === storage.store.GetLocalStorage()[i].itemname){
-                        return true;
-                    }      
-                }
-                return false;
-            }
-
-            var checkputtocart = putToCart();
-
-            if(checkputtocart){
-                // alert("already in cart");
-                Dom.hereEl.alreadyincart.classList.add("block");
-                Dom.hereEl.paragraphText.textContent = "Item is already in cart";
-                window.scrollTo({
-                  top:0,
-                  lett:0,
-                  behavior: "smooth"
-                });
-                setTimeout(() => {
-                    Dom.hereEl.alreadyincart.classList.remove("block");
-                }, 3000);
-                
-            } else {
-                var checkbooleans = storage.addToCart(picdetails, name, price, Quantitys);
-                
-                updateDom();
-                
-                Dom.hereEl.alreadyincart.classList.add("block");
-                Dom.hereEl.paragraphText.textContent = "Item added to your cart";
-                
-                window.scrollTo({
-                   top:0,
-                   lett:0,
-                   behavior: "smooth"
-                });
-                
-                setTimeout(() => {
-                   Dom.hereEl.alreadyincart.classList.remove("block");
-                }, 3000);
-                
-            }
-    
-        }
-            
-        
-        function updateDom(){
-            if(checkbooleans){
-                Dom.updateCart(storage.store.GetLocalStorage());
-                
-            }
-            updateNumCart();
-            
-        }
-        
-        
-                
-    });
-
-
-    window.onload = updateNumCart;
-    
- 
-        
-})(DomElements, localStorages);
-
-
-
 var SizeBtns = document.querySelectorAll(".size ul li");
 
  
@@ -537,4 +644,25 @@ Array.from(SizeBtns).forEach(function(btn){
         e.target.classList.add("color");
     });
 });
+
+
+var cart = storage.AccessLocalStorage.GetLocalStorage();
+var subtotal, total;
+ subtotal = document.querySelector('.cart-summary .subTotal').lastElementChild;
+ total = document.querySelector('.cart-summary .total').lastElementChild;
+cart = cart.map((item) => {
+    return item.price.slice(3) * item.quantity;
+});
+
+subtotal.textContent = 'PHP ' + cart[0];
+total.textContent = 'PHP ' + parseInt(cart[0] + 50);
+console.log(cart, total);
+
+var checkoutInfo = {
+    subtotal: parseInt(subtotal.textContent),
+    total: parseInt(total.textContent)
+}
+
+var proceedCheckout = document.querySelector('.checkout a');
+proceedCheckout.href = "http://127.0.0.1:8000/account/login?checkout=" + checkoutInfo;
 

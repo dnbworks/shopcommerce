@@ -8,6 +8,14 @@
     <div class="container checkout">
         <div class="row justify-content-center">
             <div class="col-12 col-md-6 col-lg-6">
+                <div class="cart-summary">
+                    <span>cart summary</span>
+                    <div class="summary">
+                        <p>Subtotal: </p>
+                        <p>Tax (2%): PHP 60</p>
+                        <p>Total: </p>
+                    </div>
+                </div>
                 <form action="" method="post">
                     @csrf
 
@@ -100,14 +108,7 @@
                 </form>
             </div>
             <div class="col-12 col-md-4 col-lg-4">
-                <div class="cart-summary">
-                    <p>cart summary</p>
-                    <div class="summary">
-                        <p>Subtotal: </p>
-                        <p>Shipping Cost: </p>
-                        <p>Total: </p>
-                    </div>
-                </div>
+               
                 <div class="braintree">
                 <div id="dropin-container"></div>
                 <button id="submit-button" class="button button--small button--green">Purchase</button>

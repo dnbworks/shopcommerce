@@ -837,7 +837,7 @@ footer {
 }
 
 .Shopping-cart .item {
-  padding-bottom: 50px;
+  padding-bottom: 20px;
 }
 
 .Shopping-cart .imgContainer {
@@ -855,12 +855,10 @@ footer {
 
 .Shopping-cart .checkout {
   width: 100%;
-  position: absolute;
-  bottom: 0;
-  right: 0;
+
 }
 
-.Shopping-cart .checkout button {
+.Shopping-cart .checkout a {
   display: block;
   text-align: center;
   background: #111;
@@ -969,11 +967,6 @@ footer {
 }
 
 
-
-.checkout {
-  margin-top: 70px;
-}
-
 .checkout .field {
   margin-bottom: 20px;
 }
@@ -1006,5 +999,11 @@ footer {
   text-decoration: none;
   font-family: Arial, Helvetica, sans-serif;
  
+}
+
+.cart-summary > span {
+    border: 1px solid #eee;
+    padding: 15px;
+    display: block;
 }
 /*# sourceMappingURL=style.css.map */
