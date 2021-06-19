@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-6 col-lg-6">
-                <h1>CUSTOMER LOGIN</h1>
+                <h1>RETURNING CUSTOMER</h1>
                 <div class="user">
  
                     <form action="{{ route('login') }}" method="post">
@@ -47,6 +47,15 @@
                     </div>
 
                     <a href="{{ route('register') }}">CREATE AN ACCOUNT</a>
+                    <p>Create an account for fast checkout and easy access to order history.</p>
+
+                    <div class="or d-flex justify-content-around align-items-center">
+                        <div class="line"></div>
+                        <span>or</span>
+                        <div class="line"></div>
+                    </div>
+
+                    <a href="">CONTINUE AS GUEST</a>
                 </div>
             </div>
         </div>

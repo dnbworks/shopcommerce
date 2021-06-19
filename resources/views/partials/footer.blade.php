@@ -95,11 +95,12 @@
                     
                 </div>
                 <div class="checkout" >
-                    <form action="/" method="post">
+                    <!-- <form action="/" method="post">
                         @csrf
                         <input type="hidden" name="order" value="" id="order">
                         <button type="submit">CheckOut</a>
-                    </form>
+                    </form> -->
+                    <a href="{{ route('login') }}">Proceed to checkout</a>
                 </div> 
             </div>
             <div class="col-12 col-md-4 col-lg-4">
