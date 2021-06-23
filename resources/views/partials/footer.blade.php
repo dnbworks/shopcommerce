@@ -25,7 +25,7 @@
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="pages/terms.html">Terms of Service</a></li>
                     </ul>
-                    <p>Copyright &copy; <script> document.write(new Date().getFullYear())</script> <b>YOURKOOL</b> | <b>Powered by PaperCap</b></p>
+                    <p>Copyright &copy; <script> document.write(new Date().getFullYear())</script> <b>YOURKOOL</b> | <b>Powered by Glucose</b></p>
                 </div>
             </div>
         </div>
@@ -38,9 +38,14 @@
            <img src="/images/close.png" width="27px" alt="" srcset="">
          </div>
          <div class="links" >
-             <ul>
+             <ul>  
+                @guest
                  <li><a href="{{ route('login') }}" >Login</a></li>
-                 <li><a href="spotify.html" >Listen Music</a></li>
+                @endguest
+                @auth
+                 <li><a href="{{ route('login') }}" >Your Account</a></li>
+                @endauth
+                 <li><a href="spotify.html" >Blog</a></li>
              
              </ul>
          </div>
@@ -118,11 +123,11 @@
                         <button type="submit">CheckOut</a>
                     </form> -->
                     @auth
-                    <a href="{{ route('checkout') }}">Proceed to checkout</a>
+                    <a href="{{ route('checkout') }}" id="checkout">Proceed to checkout</a>
                     @endauth
                     
                     @guest
-                    <a href="http://127.0.0.1:8000/account/login">Proceed to checkout</a>
+                    <a href="http://127.0.0.1:8000/account/login" id="login">Proceed to checkout</a>
                     @endguest
 
                    

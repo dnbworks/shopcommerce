@@ -119,8 +119,16 @@ var controller = (function(Dom, storage){
         subtotal.textContent = 'PHP ' + cartTotal;
         total.textContent = 'PHP ' + parseInt(cartTotal + 50);
         
-        var proceedCheckout = document.querySelector('.checkout a');
-        proceedCheckout.href = "http://127.0.0.1:8000/account/login?subtotal=" + cartTotal + "&total=" + parseInt(cartTotal + 50);
+        var proceedCheckout = document.querySelector('.checkout a#checkout');
+        var proceedlogin = document.querySelector('.checkout a#login');
+        if(proceedlogin) {
+            proceedlogin.href = "http://127.0.0.1:8000/account/login?subtotal=" + cartTotal + "&total=" + parseInt(cartTotal + 50);
+            // console.log(proceedlogin);
+        }
+        if(proceedCheckout) {
+            proceedCheckout.href = "http://127.0.0.1:8000/cart/checkout?subtotal=" + cartTotal + "&total=" + parseInt(cartTotal + 50);
+            // console.log(proceedCheckout);
+        }
     }
  
 

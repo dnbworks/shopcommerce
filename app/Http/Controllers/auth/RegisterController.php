@@ -20,11 +20,13 @@ class RegisterController extends Controller
     public function index(Request $request){
 
         if($request->checkout == 'true'){
-            return view('auth.register', ['status' => true]);
+         
+            return view('auth.register', ['status' => 1]);
             
         }
         
-        return view('auth.register', ['status' => false]);
+       
+        return view('auth.register', ['status' => 0]);
         
     }
 
@@ -40,10 +42,28 @@ class RegisterController extends Controller
             'zip' => 'required'
         ]);
 
+        if($request->status == 1){
+            User::create([
+                'name' => $request->firstname . ' ' . $request->lastname,
+                'email' => $request->email,
+                'password' => Hash::make($request->password)
+            ]);
+    
+     
+            auth()->attempt($request->only('email', 'password'));
+    
+    
+            Address::create([
+                'city' => $request->city,
+                'full_address' => $request->address,
+                'zip' => $request->zip,
+                'user_id' => auth()->user()->id
+            ]);
+
+            return redirect()->route('checkout');
+        }
+     
         
-
- 
-
         User::create([
             'name' => $request->firstname . ' ' . $request->lastname,
             'email' => $request->email,
@@ -60,6 +80,11 @@ class RegisterController extends Controller
             'zip' => $request->zip,
             'user_id' => auth()->user()->id
         ]);
+        
+
+ 
+
+        
 
         return redirect()->route('home');
     }

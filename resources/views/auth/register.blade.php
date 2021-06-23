@@ -15,6 +15,9 @@
                     <form action="/account/register" method="post">
                         @csrf
                         <div class="field">
+                            @isset($status)
+                            <input type="hidden" name="status" value="{{ $status }}">
+                            @endisset
                             <label for="firstname">first name</label>
                             <input type="text" name="firstname" id="firstname">
                             @error('firstname')
