@@ -28,17 +28,24 @@ class LoginController extends Controller
         ]);
 
         if(!$request->subtotal){
-     
-            if(!auth()->attempt($request->only('email', 'password'))){
-                return back()->with('status', 'Invalid login details');
-            }
+
+            if($request->checkout == 'true'){
+                if(!auth()->attempt($request->only('email', 'password'))){
+                    return back()->with('status', 'Invalid login details');
+                }
+                return redirect()->route('checkout');
             
-       
-            return redirect()->route('profile');
+            } else {
+                if(!auth()->attempt($request->only('email', 'password'))){
+                    return back()->with('status', 'Invalid login details');
+                }
+
+                 return redirect()->route('profile');
+            }
         }
-
-      
-
+     
+            
+ 
         if(!auth()->attempt($request->only('email', 'password'))){
             return back()->with('status', 'Invalid login details');
         }

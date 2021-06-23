@@ -17,8 +17,15 @@ class RegisterController extends Controller
         $this->middleware(['guest']);
     }
     
-    public function index(){
-        return view('auth.register');
+    public function index(Request $request){
+
+        if($request->checkout == 'true'){
+            return view('auth.register', ['status' => true]);
+            
+        }
+        
+        return view('auth.register', ['status' => false]);
+        
     }
 
     public function store(Request $request){
@@ -32,6 +39,8 @@ class RegisterController extends Controller
             'address' => 'required',
             'zip' => 'required'
         ]);
+
+        
 
  
 

@@ -24,19 +24,18 @@
          
              
                 <div class="user">
+                    @if(session('status'))
+                        <div class="error">
+                            <p>{{ session('status') }}</p>
+                        </div>
+                    @endif
  
                     <form action="{{ route('login') }}" method="post">
                         @csrf
                         <div class="field">
-                            @if(ISSET($Fromcheckout))
-                                <input type="hidden" name="checkout" id="checkout" value="{{ $Fromcheckout }}">
-                            @else 
-                                <input type="hidden" name="checkout" id="checkout" value="false">
-
-                            @endif
             
                             <label for="email">Email</label>
-                            <input type="text" name="email" id="email">
+                            <input type="text" name="email" id="email" value="{{ old('email') }}">
                             @error('email')
                                 <p class="error">{{ $message }}</p>
                             @enderror
@@ -61,8 +60,9 @@
                         <span>or</span>
                         <div class="line"></div>
                     </div>
-
-                    <a href="{{ route('register') }}">CREATE AN ACCOUNT</a>
+          
+                    <a href="{{ route('register') }}?checkout={{ $subtotal ? 'true' : 'false' }}">CREATE AN ACCOUNT</a>
+                  
                     <p>Create an account for fast checkout and easy access to order history.</p>
 
                     @isset($subtotal)
