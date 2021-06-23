@@ -13,11 +13,12 @@ class LoginController extends Controller
     }
     
     public function index(Request $request){
-        if(!$request->checkout){
-            return view('auth.login');
-        } 
+        // if(!$request->checkout){
+        //     return view('auth.login');
+        // } 
 
-        return view('auth.login', ['Fromcheckout' => $request->checkout, 'checkoutData' => json_encode($request->checkout)]);
+        // dd( $request->subtotal);
+        return view('auth.login', ['Fromcheckout' => $request->checkout, 'total' => $request->total, 'subtotal' => $request->subtotal]);
     }
 
     public function store(Request $request){
@@ -26,7 +27,8 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
-        if(!$request->checkout){
+        if(!$request->subtotal){
+     
             if(!auth()->attempt($request->only('email', 'password'))){
                 return back()->with('status', 'Invalid login details');
             }
@@ -35,12 +37,12 @@ class LoginController extends Controller
             return redirect()->route('profile');
         }
 
-    
+      
 
         if(!auth()->attempt($request->only('email', 'password'))){
             return back()->with('status', 'Invalid login details');
         }
-        
+    
    
         return redirect()->route('checkout');
     }

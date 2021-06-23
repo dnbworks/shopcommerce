@@ -12,8 +12,16 @@ class Address extends Model
     protected $fillable = [
         'city',
         'full_address',
-        'zip'
+        'zip',
+        'user_id'
     
+    ];
+
+    protected $hidden = [
+        'id',
+        'user_id',
+        'created_at',
+        'updated_at'
     ];
 
     public function user()

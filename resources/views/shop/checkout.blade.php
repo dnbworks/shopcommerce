@@ -5,17 +5,19 @@
 @endsection
 
 @section('content')
-    <div class="container checkout">
+    <div class="container checkout-container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-6 col-lg-6">
+                @isset($subtotal)
                 <div class="cart-summary">
                     <span>cart summary</span>
                     <div class="summary">
-                        <p>Subtotal: </p>
-                        <p>Tax (2%): PHP 60</p>
-                        <p>Total: </p>
+                        <p>Subtotal: PHP {{ $subtotal }}</p>
+                        <p>Tax (2%): PHP 50</p>
+                        <p>Total: PHP {{ $total }}</p>
                     </div>
                 </div>
+                @endisset
                 <form action="" method="post">
                     @csrf
 
@@ -38,21 +40,21 @@
                     <h1>Shipping information</h1>
                     <div class="field">
                         <label for="address">Address</label>
-                        <input type="text" name="address" id="address">
+                        <input type="text" name="address" id="address" value="{{ $userInfo->full_address }}">
                         @error('address')
                             <p class="error">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="field">
                         <label for="city">City</label>
-                        <input type="text" name="city" id="city">
+                        <input type="text" name="city" id="city" value="{{ $userInfo->city }}">
                         @error('city')
                             <p class="error">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="field">
                         <label for="postal_code">Postal code</label>
-                        <input type="text" name="postal_code" id="postal_code">
+                        <input type="text" name="postal_code" id="postal_code" value="{{ $userInfo->zip }}">
                         @error('postal_code')
                             <p class="error">{{ $message }}</p>
                         @enderror

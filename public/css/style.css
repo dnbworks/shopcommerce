@@ -280,6 +280,7 @@ header .user a {
    text-transform:uppercase;
    color:#989d8d;
    padding:15px 0;
+   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
    
 }
 
@@ -315,7 +316,31 @@ header .user a {
 }
 
 .defaultHeight {
-  height: 199px;
+  height: 133px;
+  overflow: hidden;
+}
+
+@media screen and (max-width:360px) {
+  .defaultHeight {
+    height: 153px;
+    overflow: hidden;
+  }
+}
+
+
+
+@media screen and (max-width:411px) {
+  .defaultHeight {
+    height: 179px;
+    overflow: hidden;
+  }
+}
+
+@media screen and (min-width:900px) {
+  .defaultHeight {
+    height: 333px;
+    overflow: hidden;
+  }
 }
 
 .product-section .products .itemsContainer .img-containers img {
@@ -506,6 +531,15 @@ footer {
 } */
 
 .product-details label {
+  padding: 10px 15px;
+  display: inline-block;
+  border: 2px solid #dddddd;
+  margin: 10px 5px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+ Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  cursor: pointer;
+}
+.product-details .size ul li {
   padding: 10px 15px;
   display: inline-block;
   border: 2px solid #dddddd;
@@ -737,6 +771,15 @@ footer {
   color: #585858;
 }
 
+@media screen and (min-width:900px){
+  .Shopping-cart .Quantity {
+  
+    width: 80%;
+    margin: 0%;
+  
+  }
+}
+
 .Shopping-cart .numbers {
   width: 100%;
   height: 100%;
@@ -909,6 +952,11 @@ footer {
   padding-bottom: 15px;
 }
 
+.wrappering-container .user p {
+  padding: 15px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
 .wrappering-container p.error {
   font-family: sans-serif;
   color: rgb(251, 78, 78);
@@ -965,30 +1013,32 @@ footer {
   border: 1px solid #939393;
   width: 45%;
 }
+.checkout-container {
+  margin-top: 60px;
+}
 
-
-.checkout .field {
+.checkout-container  .field {
   margin-bottom: 20px;
 }
 
-.checkout label, .checkout input, .checkout button{
+.checkout-container  label, .checkout-container  input, .checkout-container  button{
   display: block;
   width: 100%;
 }
 
-.checkout label {
+.checkout-container  label {
   text-transform: uppercase;
   font-weight: bold;
   padding-bottom: 5px;
 }
 
-.checkout input {
+.checkout-container  input {
   padding: 10px 5px;
   border: 1px solid #343434;
   width: 100%;
 }
 
-.checkout button {
+.checkout-container  button {
   background: #343434;
   color: #fff;
   text-transform: uppercase;
@@ -1000,10 +1050,33 @@ footer {
   font-family: Arial, Helvetica, sans-serif;
  
 }
+.cart-summary {
+  background: #e0f8fa;
+}
 
 .cart-summary > span {
     border: 1px solid #eee;
     padding: 15px;
     display: block;
+    background: #f8f8f8;
 }
+.cart-summary p {
+  padding: 6px 15px;
+  font-family: sans-serif;
+}
+
+.cart-level-summary {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin-top: 15px;
+}
+.cart-level-summary p{
+  background: #cecece;
+  padding: 15px 10px;
+}
+.cart-level-summary .subTotal, .cart-level-summary .shipping, .cart-level-summary .total {
+  margin-bottom: 5px;
+  padding: 5px 10px;
+}
+
+
 /*# sourceMappingURL=style.css.map */

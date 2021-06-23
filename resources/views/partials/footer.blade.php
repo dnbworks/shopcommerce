@@ -96,7 +96,7 @@
                 </div>
             </div>
             <div class="col-12 col-md-4 col-lg-4">
-                <div class="cart-summary">
+                <div class="cart-level-summary">
                     <p>Cart summary</p>
                     <div class="subTotal">
                         <span>Sub Total: </span>
@@ -117,7 +117,15 @@
                         <input type="hidden" name="order" value="" id="order">
                         <button type="submit">CheckOut</a>
                     </form> -->
+                    @auth
+                    <a href="{{ route('checkout') }}">Proceed to checkout</a>
+                    @endauth
+                    
+                    @guest
                     <a href="http://127.0.0.1:8000/account/login">Proceed to checkout</a>
+                    @endguest
+
+                   
                 </div> 
              
             </div>

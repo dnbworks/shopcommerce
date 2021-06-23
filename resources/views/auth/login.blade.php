@@ -9,17 +9,19 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-6 col-lg-6">
-                <h1>RETURNING CUSTOMER</h1>
-
-               
+                @isset($subtotal)
                 <div class="cart-summary">
                     <span>cart summary</span>
                     <div class="summary">
-                        <p>Subtotal: {{ checkoutData->subtotal }}</p>
+                        <p>Subtotal: PHP {{ $subtotal }}</p>
                         <p>Tax (2%): PHP 50</p>
-                        <p>Total: {{ checkoutData->subtotal }}</p>
+                        <p>Total: PHP {{ $total }}</p>
                     </div>
                 </div>
+                @endisset
+                <h1>RETURNING CUSTOMER</h1>
+
+         
              
                 <div class="user">
  
@@ -41,6 +43,9 @@
                         </div>
                         <div class="field">
                             <label for="password">Password</label>
+                            @isset($subtotal)
+                            <input type="hidden" name="subtotal" id="subtotal" value="true">
+                            @endisset
                             <input type="password" name="password" id="password">
                             @error('password')
                                 <p class="error">{{ $message }}</p>
@@ -60,13 +65,16 @@
                     <a href="{{ route('register') }}">CREATE AN ACCOUNT</a>
                     <p>Create an account for fast checkout and easy access to order history.</p>
 
+                    @isset($subtotal)
                     <div class="or d-flex justify-content-around align-items-center">
                         <div class="line"></div>
                         <span>or</span>
                         <div class="line"></div>
                     </div>
 
-                    <a href="{{ route('checkout') }}">CONTINUE AS GUEST</a>
+                    <a href="{{ route('checkout') }}?subtotal={{ $subtotal }}&total={{ $total }}&auth=false">CONTINUE AS GUEST</a>
+                    @endisset
+                  
                 </div>
             </div>
         </div>

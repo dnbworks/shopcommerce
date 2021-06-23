@@ -28,9 +28,9 @@
                     <div class="row products-row">
                         <span data-products="{{ $products }}" class="data"></span>
                         @foreach($products as $product)
-                        <div class="itemsContainer defaultHeight col-6 col-md-6 col-lg-4">
+                        <div class="itemsContainer col-6 col-md-6 col-lg-4">
                             <a href="/product/{{ $product->id }}">
-                            <div class="img-containers" id="{{ $product->id }}">
+                            <div class="img-containers defaultHeight" id="{{ $product->id }}">
                                 <img src="{{ $product->product_image }}" class="homeimg"  alt="shirt" >
                             </div>
                             <div class="PriceTag" >

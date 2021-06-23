@@ -1,7 +1,4 @@
 
-
-
-
 var localStorages = (function(){
     let AccessLocalStorage = {
         SetLocalStorage: function(para){
@@ -33,8 +30,6 @@ var localStorages = (function(){
 
 
 var DomElements = (function(){
-   
-   
 
     let eachElement = {
         wrapper: document.querySelector(".wrapper"),
@@ -72,14 +67,12 @@ var DomElements = (function(){
         sub: document.querySelector("#sub"),
         number: document.querySelector("#numbers"),
         totalNumItems:document.querySelectorAll(".item-container"),
-        digits: Array.from(document.querySelectorAll(".digit")),
+        digit: document.querySelector(".digit"),
        
         
         addLocalCart:document.querySelector(".add"),
         item :document.querySelector(".item")
-        
-        // products: products
-        
+    
 
     };
     return {
@@ -91,15 +84,13 @@ var DomElements = (function(){
         
         for(var i=0;i<locs.length;i++){
         cart = locs[i];
-        let itemCart = '<div class="item-container d-flex justify-content-between align-items-center" ><div class="imgContainer" id="' + cart.id + '" ><img src="' + cart.image + '" alt=""  ></div><div class="PriceTags" ><span class="spans" >' + cart.itemname + '</span><span class="spans 1">' + cart.price + '</span><div class="quantity-container" ><div class="Quantity" id="' + cart.id+ '"><a href="#" id="sub" class="subbtns" ><i class="fas fa-minus"></i></a><a href="#" id="add" class="addbtns"><i class="fas fa-plus" ></i></a><div id="numbers" >' + cart.quantity + '</div></div></div><div class="TotalCost">Item Total: $<span>'+ (cart.price.slice(3) * cart.quantity).toFixed(2) +'</span></div></div><div class="close-container"><a href="#" id="' + cart.id + '"  class="closed" >delete</a></div></div>';
+        let itemCart = '<div class="item-container d-flex justify-content-between align-items-center" ><div class="imgContainer" id="' + cart.id + '" ><img src="' + cart.image + '" alt=""  ></div><div class="PriceTags" ><span class="spans" >' + cart.itemname + '</span><span class="spans 1">' + cart.price + '</span><div class="quantity-container" ><div class="Quantity" id="' + cart.id+ '"><a href="#" id="sub" class="subbtns" ><i class="fas fa-minus"></i></a><a href="#" id="add" class="addbtns"><i class="fas fa-plus" ></i></a><div id="numbers" >' + cart.quantity + '</div></div></div><div class="TotalCost">Item Total: PHP <span>'+ (cart.price.slice(3) * cart.quantity).toFixed(2) +'</span></div></div><div class="close-container"><a href="#" id="' + cart.id + '"  class="closed" >delete</a></div></div>';
         eachElement.item.insertAdjacentHTML("afterbegin", itemCart);
         }
 
         }, 
         numofitemsIncart:function(){
-            eachElement.digits.forEach(function(digit){
-                digit.textContent = Array.from(eachElement.totalNumItems).length;
-            });
+            eachElement.digit.textContent = Array.from(eachElement.totalNumItems).length;
         }
     };
 })();
@@ -109,9 +100,30 @@ var DomElements = (function(){
 
 
 var controller = (function(Dom, storage){
+
+    function cartSummary(){
+        var cart = storage.store.GetLocalStorage();
+        var subtotal, total;
+        subtotal = document.querySelector('.cart-level-summary .subTotal').lastElementChild;
+        total = document.querySelector('.cart-level-summary .total').lastElementChild;
+        cart = cart.map((item) => {
+            return item.price.slice(3) * item.quantity;
+        });
+    
+        var cartTotal = 0;
+        cart.forEach((item) => {
+            cartTotal += item;
+        });
+    
+    
+        subtotal.textContent = 'PHP ' + cartTotal;
+        total.textContent = 'PHP ' + parseInt(cartTotal + 50);
+        
+        var proceedCheckout = document.querySelector('.checkout a');
+        proceedCheckout.href = "http://127.0.0.1:8000/account/login?subtotal=" + cartTotal + "&total=" + parseInt(cartTotal + 50);
+    }
  
 
- 
      Dom.hereEl.item.addEventListener("click", function(e){
          e.preventDefault();
             var elname = e.target, elid, cart = storage.store.GetLocalStorage();
@@ -123,19 +135,17 @@ var controller = (function(Dom, storage){
                  
         
             for(var i = 0; i < cart.length; i++){
-                 
                 if(elid == cart[i].id){
                     position = i;
-                   // console.log(elid);
-                  
-                }
 
+                }
             }
 
             cart.splice(position, 1);
             storage.store.SetLocalStorage(cart);
             Dom.updateCart(storage.store.GetLocalStorage());
             updateNumCart();
+            cartSummary();
 
         }
 
@@ -175,11 +185,11 @@ var controller = (function(Dom, storage){
         Dom.hereEl.wrapper.style.display = "block";
     });
 
-    
-    
+       
     Dom.numofitemsIncart();
 
     var storedItems;
+
     storedItems = storage.store.GetLocalStorage();
     Dom.updateCart(storedItems);
 
@@ -230,7 +240,9 @@ var controller = (function(Dom, storage){
 	         
 	         let value = this.parentElement.parentElement.previousElementSibling;
 	         let numberText = this.nextElementSibling;
-	         let cash = parseFloat(value.textContent.substring(1,6));
+	         let cash = parseFloat(value.textContent.slice(3));
+
+             
 	         
 
 	         
@@ -243,8 +255,7 @@ var controller = (function(Dom, storage){
 	         
 	         var product = shopcart.find(item => item.id == this.parentElement.id );
 
-	         console.log(product.itemname);
-	     
+
 	   
 	        
 	         if(!(parseInt(numberText.textContent) >= 12)){
@@ -261,7 +272,7 @@ var controller = (function(Dom, storage){
 	         
 	         storage.store.SetLocalStorage(shopcart);
 	         
-	         
+	         cartSummary();
 	         
 	         
 	       
@@ -279,40 +290,37 @@ var controller = (function(Dom, storage){
 	         
 	         
 	         
-	         let value = this.parentElement.parentElement.previousElementSibling;
-	         let numberText = this.parentElement.lastChild;
-	         let cash = parseFloat(value.textContent.substring(1, 9));
-	         
-	         var shopcart = storage.store.GetLocalStorage();
-	         
-	         var product = shopcart.find(item => item.id == this.parentElement.id );
-	        // console.log(product.id);
-	        // console.log(this.parentElement.id);
+                let value = this.parentElement.parentElement.previousElementSibling;
+                let numberText = this.parentElement.lastChild;
+                let cash = parseFloat(value.textContent.slice(3));
+                
+                var shopcart = storage.store.GetLocalStorage();
+                
+                var product = shopcart.find(item => item.id == this.parentElement.id );
+	
 	        
-	         if(!(parseInt(numberText.textContent) <= 1)){
-		         let minus =  parseInt(numberText.textContent) - 1;
-		         numberText.textContent = minus;
-		         
-		         product.quantity = numberText.textContent;
-		         
-		         let TotalCost = parseFloat(this.parentElement.parentElement.nextElementSibling.lastChild.textContent);
-		         let span = this.parentElement.parentElement.nextElementSibling.lastChild;
-		         
-		         span.innerText = (parseFloat(span.textContent) - cash).toFixed(2);
-		         
-		         
-		        // console.log(parseFloat(span.textContent));
-		       //  console.log(cash);
-		       
-	         } 
+                if(!(parseInt(numberText.textContent) <= 1)){
+                    let minus =  parseInt(numberText.textContent) - 1;
+                    numberText.textContent = minus;
+                    
+                    product.quantity = numberText.textContent;
+                    
+                    let TotalCost = parseFloat(this.parentElement.parentElement.nextElementSibling.lastChild.textContent);
+                    let span = this.parentElement.parentElement.nextElementSibling.lastChild;
+                    
+                    span.innerText = (parseFloat(span.textContent) - cash).toFixed(2);
+                    
+      
+                
+                } 
 	         
-	        // console.log(shopcart[this.parentElement.id].quantity);
+
 	         
 	         
-	         storage.store.SetLocalStorage(shopcart);
+	             storage.store.SetLocalStorage(shopcart);
 	         
 	         
-	         
+	             cartSummary();
 	       
 	         
 	         });
@@ -325,14 +333,16 @@ var controller = (function(Dom, storage){
 
     
 window.onload = function(){
-    var imgContainers = document.querySelectorAll('.itemsContainer');
+    cartSummary();
+    var imgContainers = document.querySelectorAll('.img-containers');
     Array.from(imgContainers).forEach(function(container){
         container.classList.remove('defaultHeight');
     });
-    console.log('hi');
+   
     var products;
     products = JSON.parse(document.querySelector('.data').dataset.products);
-    console.log(products);
+    // data fetched for databasr
+    // console.log(products);
     
 var search = document.querySelector(".search");
 var searchField = document.querySelector(".searches");
@@ -387,7 +397,7 @@ searchInput.addEventListener("keyup", function(e){
     ul.style.display = "block";
 
     ul.innerHTML = template;
-    console.log(itemArray.slice(0, 6));
+    // console.log(itemArray.slice(0, 6));
 
 
     if(e.keyCode === 13){
@@ -406,7 +416,7 @@ searchInput.addEventListener("keypress", function(e){
         button.click();
         searchField.classList.remove("displaysearch");
         ul.innerHTML = "";
-        console.log("hi");
+
         return false;
     }
    
@@ -447,12 +457,8 @@ form.addEventListener("submit", function(e){
     if(searches.value !== ""){
         
 
-        // let product = products.find(item => {
-        //     return item.item === searches.id;
-        // });
-
         let items = products.filter(item => {
-            // return item.item === searches.id;
+       
             return item.product_name.toUpperCase().indexOf(searches.value.toUpperCase()) !== -1;
         });
         
@@ -487,15 +493,8 @@ form.addEventListener("submit", function(e){
         }
         
 
-        
-
-
-
-        console.log(items);
-       // productRow.innerHTML = template;
-    
-       
-          
+        // console.log(items);
+  
         
      
     } 
@@ -504,7 +503,7 @@ form.addEventListener("submit", function(e){
     searchField.classList.remove("displaysearch");
     ul.innerHTML = "";
 
-    console.log(ul);
+    // console.log(ul);
  
 
     searches.value = "";
@@ -521,59 +520,6 @@ updateNumCart();
 }
     
 
-    
-    // window.onload = updateNumCart;
-    
-    var productItem = Dom.hereEl.products;
-    
-    var template = "";
-    // inserting into dom
-    // for(var i=0 ; i<productItem.length;i++){
-    //     template += `
-    //     <div class="itemsContainer col-6 col-md-6 col-lg-4">
-    //       <a href="details.html?name=${productItem[i].item}">
-    //         <div class="img-containers" id="albumcovertshirt">
-    //             <img src=${productItem[i].img} class="homeimg"  alt="shirt1"    >
-    //         </div>
-    //         <div class="PriceTag" >
-    //             <a href="details.html?name=${productItem[i].item}">${productItem[i].name} </a>
-    //             <span>${productItem[i].price}</span>
-    //         </div>
-    //         </a>
-    //     </div>
-        
-    //     `;
-    // }
-    
-    
-    
- /*   setTimeout(function(){ */
-    //    Dom.hereEl.productRow.innerHTML = template;
-       
- /*   }, 2000); */
- /*
- var imgs = document.querySelectorAll(".img-containers img");
- 
- imgs.forEach(img => {
-     img.onload = function(){
-        // default.classList.remove("blur");
-        
-     }
- 
- });
- 
-    
-    */
-    
-    
-    
-   
-    
-    
-    
-    
-    
-    
         
 })(DomElements, localStorages);
 
@@ -582,9 +528,12 @@ var cart = JSON.parse(localStorage.getItem('cart'));
 var cartlength = cart.length;
 
 if(cartlength){
-    input.value = localStorage.getItem('cart')
+    // input.value = localStorage.getItem('cart')
     // console.log(cartlength);
 }
+
+
+
 
 
 

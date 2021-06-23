@@ -66,7 +66,7 @@ if(storage.AccessLocalStorage.GetLocalStorage() === null){
 }
 
 var totalItems = Array.from(document.querySelectorAll(".item-container"));
-console.log(totalItems);
+
 
 var view = {
     menuBtns: Array.from(document.querySelectorAll(".bar-container")),
@@ -195,79 +195,84 @@ var controller = function(){
         var addbtns = document.querySelectorAll(".Shopping-cart .addbtns");
         var subbtns = document.querySelectorAll(".Shopping-cart .subbtns");
 
-
         Array.from(addbtns).forEach(function(btn){
 
             btn.addEventListener("click", function(e){
             e.preventDefault();
-      
-            let value = this.parentElement.parentElement.previousElementSibling;
+        
+            let value = this.parentElement.parentElement.previousElementSibling.previousElementSibling;
             let numberText = this.nextElementSibling;
             // let cash = parseFloat(value.textContent.substring(1,6));
             let cash = parseInt(value.textContent.slice(3));
-
-
-            let span = this.parentElement.parentElement.nextElementSibling.lastChild;
-
+    
+    
+            let span = this.parentElement.parentElement.nextElementSibling.lastElementChild;
+            
             let plus;
-
+    
             var shopcart = storage.AccessLocalStorage.GetLocalStorage();
-
+    
             var product = shopcart.find(item => item.id == this.parentElement.id );
-
-
+    
+    
             if(!(parseInt(numberText.textContent) >= 12)){
             plus =  parseInt(numberText.textContent) + 1;
             numberText.textContent = plus;
-
+    
             product.quantity = parseInt(numberText.textContent);
             let TotalCost = parseFloat(this.parentElement.parentElement.nextElementSibling.lastChild.textContent);
-
+    
             span.innerText = (cash * plus).toFixed(2);
-
-
+    
+    
             } 
-
+    
             storage.AccessLocalStorage.SetLocalStorage(shopcart);
-
+            cartSummary();
             });
         });
-
+    
         Array.from(subbtns).forEach(function(btn){
-
+    
             btn.addEventListener("click", function(e){
                 e.preventDefault();
-
-                let value = this.parentElement.parentElement.previousElementSibling;
+    
+                let value = this.parentElement.parentElement.previousElementSibling.previousElementSibling;
                 let numberText = this.nextElementSibling.nextElementSibling;
                 let numberTextContent = parseInt(this.nextElementSibling.nextElementSibling.textContent);
                 let cash = parseInt(value.textContent.slice(3));
-
-                // console.log(this.nextElementSibling.nextElementSibling.textContent);
-
+    
+                let span = this.parentElement.parentElement.nextElementSibling.lastElementChild;
+    
+    
                 var shopcart = storage.AccessLocalStorage.GetLocalStorage();
-
+    
                 var product = shopcart.find(item => item.id == this.parentElement.id );
-
-
+    
+    
                 if(!(numberTextContent <= 1)){
                     let minus =  parseInt(numberText.textContent) - 1;
                     numberText.textContent = minus;
-
+    
                     product.quantity = parseInt(numberText.textContent);
-
+    
                     let TotalCost = parseFloat(this.parentElement.parentElement.nextElementSibling.lastChild.textContent);
-                    let span = this.parentElement.parentElement.nextElementSibling.lastChild;
-
+                    
+    
                     span.innerText = (parseFloat(span.textContent) - cash).toFixed(2);
-
+    
                 } 
-
+    
                 storage.AccessLocalStorage.SetLocalStorage(shopcart);
-
-
+    
+                cartSummary();
             });
+    
         });
+
+       
+       
+    
     }
 
     selectQuantity();
@@ -290,38 +295,10 @@ var controller = function(){
           
 
         }
+        cartSummary();
 
    });
 
-//   view.item.addEventListener("click", function(e){
-//         e.preventDefault();
-//         var elname = e.target, elid, cart = storage.AccessLocalStorage.GetLocalStorage();
-        
-//         if(elname.className === "closed"){
-            
-//             elid = elname.getAttribute("id");
-//             var position;
-                    
-        
-//             for(var i = 0; i < cart.length; i++){
-                    
-//                 if(elid == cart[i].id){
-//                     position = i;
-//                     // console.log(elid);
-                    
-//                 }
-
-//             }
-
-//             cart.splice(position, 1);
-//             storage.AccessLocalStorage.SetLocalStorage(cart);
-//             view.updateCart(storage.AccessLocalStorage.GetLocalStorage());
-//             updateNumCart();
-            
-
-//         }
-
-//     });
 
     view.menuBtns.forEach((menuBtn) => {
         menuBtn.addEventListener("click", function(e){
@@ -414,6 +391,7 @@ var controller = function(){
 
             var checkbooleans = storage.addToCart(picdetails, name, price, Quantitys, size);
             updateDom();
+            cartSummary();
             
             view.alreadyincart.classList.add("block");
             view.paragraphText.textContent = "Item added to your cart";
@@ -460,6 +438,7 @@ var controller = function(){
                 var checkbooleans = storage.addToCart(picdetails, name, price, Quantitys, size);
                 
                 updateDom();
+                cartSummary();
                 
                 view.alreadyincart.classList.add("block");
                 view.paragraphText.textContent = "Item added to your cart";
@@ -485,7 +464,8 @@ var controller = function(){
                 
             }
             updateNumCart();
-            
+            cartSummary();
+      
             
         }
         
@@ -495,141 +475,90 @@ var controller = function(){
 
    
 
-    console.log('hi');
-
     var addbtns = document.querySelectorAll(".Shopping-cart .addbtns");
-        var subbtns = document.querySelectorAll(".Shopping-cart .subbtns");
+    var subbtns = document.querySelectorAll(".Shopping-cart .subbtns");
 
 
-        Array.from(addbtns).forEach(function(btn){
+    Array.from(addbtns).forEach(function(btn){
 
-            btn.addEventListener("click", function(e){
+        btn.addEventListener("click", function(e){
+        e.preventDefault();
+    
+        let value = this.parentElement.parentElement.previousElementSibling.previousElementSibling;
+        let numberText = this.nextElementSibling;
+        // let cash = parseFloat(value.textContent.substring(1,6));
+        let cash = parseInt(value.textContent.slice(3));
+
+
+        let span = this.parentElement.parentElement.nextElementSibling.lastElementChild;
+        
+        let plus;
+
+        var shopcart = storage.AccessLocalStorage.GetLocalStorage();
+
+        var product = shopcart.find(item => item.id == this.parentElement.id );
+
+
+        if(!(parseInt(numberText.textContent) >= 12)){
+        plus =  parseInt(numberText.textContent) + 1;
+        numberText.textContent = plus;
+
+        product.quantity = parseInt(numberText.textContent);
+        let TotalCost = parseFloat(this.parentElement.parentElement.nextElementSibling.lastChild.textContent);
+
+        span.innerText = (cash * plus).toFixed(2);
+
+
+        } 
+
+        storage.AccessLocalStorage.SetLocalStorage(shopcart);
+        cartSummary();
+        });
+    });
+
+    Array.from(subbtns).forEach(function(btn){
+
+        btn.addEventListener("click", function(e){
             e.preventDefault();
-      
-            let value = this.parentElement.parentElement.previousElementSibling;
-            let numberText = this.nextElementSibling;
-            // let cash = parseFloat(value.textContent.substring(1,6));
+
+            let value = this.parentElement.parentElement.previousElementSibling.previousElementSibling;
+            let numberText = this.nextElementSibling.nextElementSibling;
+            let numberTextContent = parseInt(this.nextElementSibling.nextElementSibling.textContent);
             let cash = parseInt(value.textContent.slice(3));
 
+            let span = this.parentElement.parentElement.nextElementSibling.lastElementChild;
 
-            let span = this.parentElement.parentElement.nextElementSibling.lastChild;
-
-            let plus;
 
             var shopcart = storage.AccessLocalStorage.GetLocalStorage();
 
             var product = shopcart.find(item => item.id == this.parentElement.id );
 
 
-            if(!(parseInt(numberText.textContent) >= 12)){
-            plus =  parseInt(numberText.textContent) + 1;
-            numberText.textContent = plus;
+            if(!(numberTextContent <= 1)){
+                let minus =  parseInt(numberText.textContent) - 1;
+                numberText.textContent = minus;
 
-            product.quantity = parseInt(numberText.textContent);
-            let TotalCost = parseFloat(this.parentElement.parentElement.nextElementSibling.lastChild.textContent);
+                product.quantity = parseInt(numberText.textContent);
 
-            span.innerText = (cash * plus).toFixed(2);
+                let TotalCost = parseFloat(this.parentElement.parentElement.nextElementSibling.lastChild.textContent);
+                
 
+                span.innerText = (parseFloat(span.textContent) - cash).toFixed(2);
 
             } 
 
             storage.AccessLocalStorage.SetLocalStorage(shopcart);
 
-            });
+            cartSummary();
         });
 
-        Array.from(subbtns).forEach(function(btn){
+    });
 
-            btn.addEventListener("click", function(e){
-                e.preventDefault();
-
-                let value = this.parentElement.parentElement.previousElementSibling;
-                let numberText = this.nextElementSibling.nextElementSibling;
-                let numberTextContent = parseInt(this.nextElementSibling.nextElementSibling.textContent);
-                let cash = parseInt(value.textContent.slice(3));
-
-                // console.log(this.nextElementSibling.nextElementSibling.textContent);
-
-                var shopcart = storage.AccessLocalStorage.GetLocalStorage();
-
-                var product = shopcart.find(item => item.id == this.parentElement.id );
-
-
-                if(!(numberTextContent <= 1)){
-                    let minus =  parseInt(numberText.textContent) - 1;
-                    numberText.textContent = minus;
-
-                    product.quantity = parseInt(numberText.textContent);
-
-                    let TotalCost = parseFloat(this.parentElement.parentElement.nextElementSibling.lastChild.textContent);
-                    let span = this.parentElement.parentElement.nextElementSibling.lastChild;
-
-                    span.innerText = (parseFloat(span.textContent) - cash).toFixed(2);
-
-                } 
-
-                storage.AccessLocalStorage.SetLocalStorage(shopcart);
-
-
-            });
-        });
-  
-
+    cartSummary();
 }
 
 window.onload = controller;
 
-
-/*
-var localStorages = (function(){
-    let AccessLocalStorage = {
-        SetLocalStorage: function(para){
-            localStorage.setItem("cart", JSON.stringify(para));
-        },
-        GetLocalStorage: function(){
-            return JSON.parse(localStorage.getItem("cart"));
-        },
-        removeLocalStorage: function(){
-            localStorage.removeItem("cart");
-        }
-    };
-        
-    function AddCart(id, image, itemname, price, quantity, size){
-        this.id = id; 
-        this.image = image;
-        this.itemname = itemname;
-        this.price = price;
-        this.quantity = quantity;
-        this.size = size;
-    }
-    
-    if(AccessLocalStorage.GetLocalStorage() === null){
-            AccessLocalStorage.SetLocalStorage([]);
-    }
-        
-    return {
-        addToCart:function(img, name, prx, qua, size){
-        let addedItem, itemId, addtoStore, LocStore;
-        
-        if(AccessLocalStorage.GetLocalStorage().length > 0){
-            itemId = AccessLocalStorage.GetLocalStorage()[AccessLocalStorage.GetLocalStorage().length - 1].id + 1;
-        } else{
-            itemId = 0;
-        }
-        
-        addedItem = new AddCart(itemId, img, name, prx, qua, size);
-        LocStore = AccessLocalStorage.GetLocalStorage();
-        LocStore.push(addedItem);
-        AccessLocalStorage.SetLocalStorage(LocStore);
-        
-        return true;
-        },
-    
-        store:AccessLocalStorage
-    
-    };
-})();
-*/
 
 
 var SizeBtns = document.querySelectorAll(".size ul li");
@@ -645,24 +574,36 @@ Array.from(SizeBtns).forEach(function(btn){
     });
 });
 
+function cartSummary(){
+    var cart = storage.AccessLocalStorage.GetLocalStorage();
+    var subtotal, total;
+    subtotal = document.querySelector('.cart-level-summary .subTotal').lastElementChild;
+    total = document.querySelector('.cart-level-summary .total').lastElementChild;
+    cart = cart.map((item) => {
+        return item.price.slice(3) * item.quantity;
+    });
 
-var cart = storage.AccessLocalStorage.GetLocalStorage();
-var subtotal, total;
- subtotal = document.querySelector('.cart-summary .subTotal').lastElementChild;
- total = document.querySelector('.cart-summary .total').lastElementChild;
-cart = cart.map((item) => {
-    return item.price.slice(3) * item.quantity;
-});
+    var cartTotal = 0;
+    cart.forEach((item) => {
+        
+        cartTotal += item;
+      
+    });
 
-subtotal.textContent = 'PHP ' + cart[0];
-total.textContent = 'PHP ' + parseInt(cart[0] + 50);
-console.log(cart, total);
+    // console.log(cart);
+    // console.log(cartTotal);
 
-var checkoutInfo = {
-    subtotal: parseInt(subtotal.textContent),
-    total: parseInt(total.textContent)
+
+
+    subtotal.textContent = 'PHP ' + cartTotal;
+    total.textContent = 'PHP ' + parseInt(cartTotal + 50);
+    
+
+    var checkoutInfo = {
+        subtotal: parseInt(subtotal.textContent),
+        total: parseInt(total.textContent)
+    }
+
+    var proceedCheckout = document.querySelector('.checkout a');
+    proceedCheckout.href = "http://127.0.0.1:8000/account/login?subtotal=" + cartTotal + "&total=" + parseInt(cartTotal + 50);
 }
-
-var proceedCheckout = document.querySelector('.checkout a');
-proceedCheckout.href = "http://127.0.0.1:8000/account/login?checkout=" + checkoutInfo;
-
