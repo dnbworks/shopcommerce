@@ -79,7 +79,7 @@
                             <p class="error">{{ $message }}</p>
                         @enderror
                     </div>
-                    <p>Already have an account <a href="http://127.0.0.1:8000/account/login?checkout=true">Login</a></p>
+                    <!-- <p>Already have an account <a href="http://127.0.0.1:8000/account/login?checkout=true">Login</a></p> -->
                     <h1>Shipping information</h1>
                     <div class="field">
                         <label for="address">Address</label>

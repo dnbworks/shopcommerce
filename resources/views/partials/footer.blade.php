@@ -25,7 +25,7 @@
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="pages/terms.html">Terms of Service</a></li>
                     </ul>
-                    <p>Copyright &copy; <script> document.write(new Date().getFullYear())</script> <b>YOURKOOL</b> | <b>Powered by Glucose</b></p>
+                    <p>Copyright &copy; <script> document.write(new Date().getFullYear())</script> <b>YOURKOOL</b> | <b>Powered by Papercups</b></p>
                 </div>
             </div>
         </div>
