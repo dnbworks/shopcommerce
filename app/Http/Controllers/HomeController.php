@@ -14,8 +14,8 @@ class HomeController extends Controller
         return view('shop.index', ['products' => $products]);
     }
 
-    public function show($id){
-        $product = Product::findOrFail($id);
+    public function show($slug){
+        $product = Product::where('product_name', $slug)->firstOrFail();
         return view('shop.show', ['product' => $product]);
     }
 

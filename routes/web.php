@@ -26,7 +26,7 @@ Route::post('/', [HomeController::class, 'store']);
 Route::get('/account/profile', [ProfileController::class, 'index'])->name('profile');
 Route::post('/account/profile', [ProfileController::class, 'store']);
 
-Route::get('/product/{id}', [HomeController::class, 'show']);
+Route::get('/product/{slug}', [HomeController::class, 'show'])->name('product.show');
 
 Route::get('/account/login', [LoginController::class, 'index'])->name('login');
 Route::post('/account/login', [LoginController::class, 'store']);

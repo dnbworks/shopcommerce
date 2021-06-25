@@ -29,12 +29,12 @@
                         <span data-products="{{ $products }}" class="data"></span>
                         @foreach($products as $product)
                         <div class="itemsContainer col-6 col-md-6 col-lg-4">
-                            <a href="/product/{{ $product->id }}">
+                            <a href="{{ route('product.show', $product->product_name) }}">
                             <div class="img-containers defaultHeight" id="{{ $product->id }}">
                                 <img src="{{ $product->product_image }}" class="homeimg"  alt="shirt" >
                             </div>
                             <div class="PriceTag" >
-                                <a href="/product/{{ $product->id }}">{{ $product->product_name }} </a>
+                                <a href="{{ route('product.show', $product->product_name) }}">{{ $product->product_name }} </a>
                                 <span>PHP {{ $product->product_price }} </span>
                             </div>
                             </a>

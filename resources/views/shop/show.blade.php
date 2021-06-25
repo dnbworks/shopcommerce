@@ -1,5 +1,5 @@
 @extends('layout.layout')
-
+@section('title', $product->product_name) 
 @section('styles')
     <link rel="stylesheet" href="../css/style.css">
 @endsection
