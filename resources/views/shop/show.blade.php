@@ -18,7 +18,7 @@
                     <div class="row">
 
                         <div class="product-img col-12 col-md-6 col-lg-6" >
-                            <img id="pic" src="{{ $product->product_image }}" alt="tshirt" >
+                            <img id="pic" src="{{ $product->product_image }}" alt="tshirt" class="{{ $product->id }}">
                         
                         </div>
 
@@ -46,6 +46,8 @@
                                     <div id="numbers"  >1</div>
                                 </div>
                             </div>
+
+                            <p style="text-align:center;">Ships in 1-2 weks</p>
                                
                             
                             
@@ -72,7 +74,7 @@
                             </div>
                             
                             -->
-                            <a href="#" class="add"  >add to cart</a>
+                            <a href="{{ route('addToCart', ['id' => $product->id ]) }}" class="add"  >add to cart</a>
                             <a href="#" class="add black"  >Buy now</a>
                             </form>
 

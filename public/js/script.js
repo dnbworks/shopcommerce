@@ -1,4 +1,6 @@
 
+
+
 var localStorages = (function(){
     let AccessLocalStorage = {
         SetLocalStorage: function(para){
@@ -100,7 +102,13 @@ var DomElements = (function(){
 
 
 var controller = (function(Dom, storage){
-
+   
+    if(document.querySelector('#opencart')){
+        var opencart = document.querySelector('#opencart');
+        Dom.hereEl.cart.classList.add("showcart");
+        Dom.hereEl.wrapper.style.display = "none";
+        console.log('yes sir');
+    }
     function cartSummary(){
         var cart = storage.store.GetLocalStorage();
         var subtotal, total;
@@ -193,8 +201,8 @@ var controller = (function(Dom, storage){
         Dom.hereEl.wrapper.style.display = "block";
     });
 
-       
-    Dom.numofitemsIncart();
+    // for display number of items in the cart js disables to let server handle it
+    // Dom.numofitemsIncart();
 
     var storedItems;
 
@@ -206,28 +214,29 @@ var controller = (function(Dom, storage){
 
 
     function updateNumCart(){
-        let digits = Array.from(document.querySelectorAll(".digit")),   
-            totalNumItems = document.querySelectorAll(".item-container");
+        // for display number of items in the cart js disables to let server handle it
+        // let digits = Array.from(document.querySelectorAll(".digit")),   
+        //     totalNumItems = document.querySelectorAll(".item-container");
 
-            digits.forEach(function(digit){
-                digit.textContent = Array.from(totalNumItems).length;
-        });
+        //     digits.forEach(function(digit){
+        //         digit.textContent = Array.from(totalNumItems).length;
+        // });
 
-        if(Array.from(totalNumItems).length === 0){
+        // if(Array.from(totalNumItems).length === 0){
             
-            var emptycart = document.querySelector(".empty-cart"),
-                cartRow = document.querySelector(".cart-row-container");
+        //     var emptycart = document.querySelector(".empty-cart"),
+        //         cartRow = document.querySelector(".cart-row-container");
                 
                 
-                emptycart.style.display = "block";
+        //         emptycart.style.display = "block";
               
            
-        } else {
-            var emptycart = document.querySelector(".empty-cart"),
-            cartRow = document.querySelector(".cart-row-container");
-            emptycart.style.display = "none";
+        // } else {
+        //     var emptycart = document.querySelector(".empty-cart"),
+        //     cartRow = document.querySelector(".cart-row-container");
+        //     emptycart.style.display = "none";
          
-        }
+        // }
         
         addAndSub();
 
@@ -341,6 +350,64 @@ var controller = (function(Dom, storage){
 
     
 window.onload = function(){
+ 
+    // localStorage.setItem("hash", document.querySelector('.wrapper h3').id);
+
+    var alphanumeric = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    var hash = '';
+    var hashesString = JSON.parse(document.querySelector('.wrapper h3').id);
+    console.log(hashesString.hashes.length );
+
+    var clienthash = localStorage.getItem("hash");
+
+    for(var i = 0; i < 64; i++){
+        var randomChar = Math.floor(Math.random() * alphanumeric.length);
+        hash += alphanumeric.substring(randomChar, randomChar+1);
+    }
+
+    var matchedhash = hashesString.hashes.find((hash) => {
+        return hash == clienthash;
+    });
+
+    // console.log(hash);
+    if(matchedhash){
+        localStorage.setItem("hash", matchedhash);
+        console.log(matchedhash);
+    }else {
+        localStorage.setItem("hash", hash);
+    }
+    
+    
+
+    // for(var i = 0; i < hashesString.hashes.length; i++){
+    //     // console.log(hashesString.hashes[i]);
+    //     if(hashesString.hashes[i] == clienthash){
+    //         localStorage.setItem("hash", hashesString.hashes[i]);
+    //         console.log(hashesString.hashes[i]);
+    //         console.log('true');
+    //         break;
+    //     }
+    //     // else {
+    //     //     localStorage.setItem("hash", hash);
+    //     // }
+    // }
+    
+    // localStorage.setItem("hash", '7310d23b7eb3f0b818536d8543445d05d713fa739b94a6521cce1e3dffc1b947');
+    
+    //  localStorage.setItem("hash", 'Gv6NmtZBCKwPDWtuXoJY2GEp75538gN2QPzC8xKruBuwy0M1qOCLZ8FpMyCL8XyD');
+    
+    
+
+    
+    // if(localStorage.getItem('hash')){
+
+    //     window.location.href = window.location.href + '?id=' + localStorage.getItem('hash');
+    // }
+    console.log(window.location.href);
+
+
+    
+  
     cartSummary();
     var imgContainers = document.querySelectorAll('.img-containers');
     Array.from(imgContainers).forEach(function(container){
@@ -352,178 +419,178 @@ window.onload = function(){
     // data fetched for databasr
     // console.log(products);
     
-var search = document.querySelector(".search");
-var searchField = document.querySelector(".searches");
-var searchInput = document.querySelector(".searches form input");
-var close = document.querySelector('.searches span');
-var ul = document.querySelector('.searches ul');
-var form = document.querySelector(".searches form");
+    var search = document.querySelector(".search");
+    var searchField = document.querySelector(".searches");
+    var searchInput = document.querySelector(".searches form input");
+    var close = document.querySelector('.searches span');
+    var ul = document.querySelector('.searches ul');
+    var form = document.querySelector(".searches form");
 
-search.addEventListener("click", function(e){
-    e.preventDefault();
-    searchField.classList.add("displaysearch");
+    search.addEventListener("click", function(e){
+        e.preventDefault();
+        searchField.classList.add("displaysearch");
 
-    searchInput.focus();
-});
-
-close.addEventListener("click", function(){
-
-    searchField.classList.remove("displaysearch");
-    ul.innerHTML = "";
-    
-});
-
-searchInput.addEventListener("keyup", function(e){
-    var searchChar = e.target.value.toUpperCase();
-    var template = "";
-    
-
-   
-    var itemArray = [];
-    for(var i=0 ; i<products.length;i++){
-
-        if(products[i].product_name.toUpperCase().indexOf(searchChar) !== -1){
-
-            itemArray.push(products[i]);
-       
-          
-        }
-       
-      
-    }
-
-     itemArray.slice(0, 6).forEach(function(product){
-        
-        if(product.product_name.toUpperCase().indexOf(searchChar) !== -1){
-            
-            template += `
-                <li class="searchItem" id=${product.id}>${product.product_name}</li>
-            `;
-        }
+        searchInput.focus();
     });
 
-    ul.style.display = "block";
+    close.addEventListener("click", function(){
 
-    ul.innerHTML = template;
-    // console.log(itemArray.slice(0, 6));
-
-
-    if(e.keyCode === 13){
-        ul.innerHTML = "";
-        return false;
-    }
-    
-    
-});
-
-
-
-searchInput.addEventListener("keypress", function(e){
-    let button = document.querySelector(".searches form button");
-    if(e.keyCode === 13){
-        button.click();
         searchField.classList.remove("displaysearch");
         ul.innerHTML = "";
-
-        return false;
-    }
-   
-});
-
-var searchField = document.querySelector(".searches");
         
+    });
+
+    searchInput.addEventListener("keyup", function(e){
+        var searchChar = e.target.value.toUpperCase();
+        var template = "";
+        
+
     
+        var itemArray = [];
+        for(var i=0 ; i<products.length;i++){
 
-ul.addEventListener("click", function(e){
-    let searches = document.querySelector(".searches form input");
-    let button = document.querySelector(".searches form button");
+            if(products[i].product_name.toUpperCase().indexOf(searchChar) !== -1){
 
-    if(e.target.className = "searchItem"){
-        searches.value = e.target.textContent;
-        searches.id = e.target.id;
-
-        button.click();
-        searchField.classList.remove("displaysearch");
-        ul.innerHTML = "";
-  
-    }
-
-});
-
-
-
-var productRow = document.querySelector(".products-row");
-
-
-
-
-form.addEventListener("submit", function(e){
-    e.preventDefault();
-    let searches = document.querySelector(".searches form input");
-    var template = "";
-
-    if(searches.value !== ""){
+                itemArray.push(products[i]);
         
-
-        let items = products.filter(item => {
-       
-            return item.product_name.toUpperCase().indexOf(searches.value.toUpperCase()) !== -1;
-        });
+            
+            }
         
-        if(items.length){
-           items.forEach(function(product){
-	           template += `
-		           <div class="itemsContainer col-6 col-md-6 col-lg-4">
-                       <a href="/product/${product.id}">
-			           <div class="img-containers" id="albumcovertshirt">
-				           <img src=${product.product_image} class="homeimg"  alt="shirt1"    >
-			           </div>
-			           <div class="PriceTag" >
-				           <a href="/product/${product.id}">${product.product_name} </a>
-				           <span>PHP ${product.product_price}</span>
-			           </div>
-                       </a>
-		           </div>`;
-           
-           });
-           
-           productRow.innerHTML = template;
-        
-        } else {
-           template = `
-               <div class="col-12 notFound">
-                 <p>Sorry item ${searches.value} was not found... </p>
-               </div>
-           `;
-           
-           productRow.innerHTML = template;
         
         }
-        
 
-        // console.log(items);
-  
-        
-     
-    } 
+        itemArray.slice(0, 6).forEach(function(product){
+            
+            if(product.product_name.toUpperCase().indexOf(searchChar) !== -1){
+                
+                template += `
+                    <li class="searchItem" id=${product.id}>${product.product_name}</li>
+                `;
+            }
+        });
 
+        ul.style.display = "block";
+
+        ul.innerHTML = template;
+        // console.log(itemArray.slice(0, 6));
+
+
+        if(e.keyCode === 13){
+            ul.innerHTML = "";
+            return false;
+        }
+        
+        
+    });
+
+
+
+    searchInput.addEventListener("keypress", function(e){
+        let button = document.querySelector(".searches form button");
+        if(e.keyCode === 13){
+            button.click();
+            searchField.classList.remove("displaysearch");
+            ul.innerHTML = "";
+
+            return false;
+        }
     
-    searchField.classList.remove("displaysearch");
+    });
+
+    var searchField = document.querySelector(".searches");
+        
+    
+
+    ul.addEventListener("click", function(e){
+        let searches = document.querySelector(".searches form input");
+        let button = document.querySelector(".searches form button");
+
+        if(e.target.className = "searchItem"){
+            searches.value = e.target.textContent;
+            searches.id = e.target.id;
+
+            button.click();
+            searchField.classList.remove("displaysearch");
+            ul.innerHTML = "";
+    
+        }
+
+    });
+
+
+
+    var productRow = document.querySelector(".products-row");
+
+
+
+
+    form.addEventListener("submit", function(e){
+        e.preventDefault();
+        let searches = document.querySelector(".searches form input");
+        var template = "";
+
+        if(searches.value !== ""){
+            
+
+            let items = products.filter(item => {
+        
+                return item.product_name.toUpperCase().indexOf(searches.value.toUpperCase()) !== -1;
+            });
+            
+            if(items.length){
+            items.forEach(function(product){
+                template += `
+                    <div class="itemsContainer col-6 col-md-6 col-lg-4">
+                        <a href="/product/${product.product_name}">
+                        <div class="img-containers" id="albumcovertshirt">
+                            <img src=${product.product_image} class="homeimg"  alt="shirt1"    >
+                        </div>
+                        <div class="PriceTag" >
+                            <a href="/product/${product.product_name}">${product.product_name} </a>
+                            <span>PHP ${product.product_price}</span>
+                        </div>
+                        </a>
+                    </div>`;
+            
+            });
+            
+            productRow.innerHTML = template;
+            
+            } else {
+            template = `
+                <div class="col-12 notFound">
+                    <p>Sorry item ${searches.value} was not found... </p>
+                </div>
+            `;
+            
+            productRow.innerHTML = template;
+            
+            }
+            
+
+            // console.log(items);
+    
+            
+        
+        } 
+
+        
+        searchField.classList.remove("displaysearch");
+        ul.innerHTML = "";
+
+        // console.log(ul);
+    
+
+        searches.value = "";
+
+
+    });
+
+
+
     ul.innerHTML = "";
 
-    // console.log(ul);
- 
-
-    searches.value = "";
-
-
-});
-
-
-
-ul.innerHTML = "";
-
-updateNumCart();
+    updateNumCart();
 
 }
     

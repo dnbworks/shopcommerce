@@ -141,14 +141,8 @@ var view = {
             </div>`;
             view.item.insertAdjacentHTML("afterbegin", itemCart);
         }
-    },
-
-    numofitemsIncart: function(){
-    
-        this.digit.textContent = JSON.parse(localStorage.getItem('cart')).length;
-        
-      
     }
+
 
 }
  
@@ -159,15 +153,15 @@ var view = {
  
 var controller = function(){
 
-    view.numofitemsIncart();
+
 
     function updateNumCart(){
-        let digits = Array.from(document.querySelectorAll(".digit")),   
-            totalNumItems = document.querySelectorAll(".item-container");
+        // let digits = Array.from(document.querySelectorAll(".digit")),   
+        //     totalNumItems = document.querySelectorAll(".item-container");
 
-            digits.forEach(function(digit){
-                digit.textContent = Array.from(totalNumItems).length;
-        });
+        //     digits.forEach(function(digit){
+        //         digit.textContent = Array.from(totalNumItems).length;
+        // });
 
         if(Array.from(totalNumItems).length === 0){
             
@@ -375,7 +369,7 @@ var controller = function(){
     storedItems = storage.AccessLocalStorage.GetLocalStorage();
     view.updateCart(storedItems);
     view.addLocalCart.addEventListener("click", function(e){
-        e.preventDefault();
+        // e.preventDefault();
         
         var name = view.itemName.textContent;
         var price = view.prices.textContent;
@@ -468,6 +462,10 @@ var controller = function(){
       
             
         }
+
+        this.href = `http://127.0.0.1:8000/add-to-cart?id=${view.picture.className}&Qty=${Quantitys}&size=${size}`;
+        // http://127.0.0.1:8000/add-to-cart?id=1
+        console.log(this.href);
         
         
                 

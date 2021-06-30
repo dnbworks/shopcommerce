@@ -18,14 +18,24 @@
 </head>
 <body class="antialiased">
 @include('partials.nav')
+<div class="main-wrapper">
+
 
 @yield('content')
 
 
 @include('partials.footer')
 
-<script src="/js/fontawesome.js"></script>
+</div>
+@include('partials.components')
 @yield('scripts')
+<script src="/js/fontawesome.js"></script>
+<script src="/js/smooth-scrollbar.js"></script>
+
+<script>
+    var Scrollbar = window.Scrollbar;
+    Scrollbar.init(document.querySelector('.main-wrapper'));
+</script>
 
 </body>
 </html>

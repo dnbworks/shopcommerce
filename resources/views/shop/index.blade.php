@@ -1,5 +1,5 @@
 @extends('layout.layout')
-
+@section('title', 'home') 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('/css/style.css') }}">
 @endsection
@@ -14,7 +14,27 @@
  
 <div class="wrapper">
     <div class="product-section borders">
-        <h3>Mars Tour Collection </h3>
+        <h3 id="{{ $hashes  }}">Mars Tour Collection </h3>
+            
+          <div class="container">
+            <!-- <p>{{ $count }}</p> -->
+            <!-- <p>{{ $hash  }}</p> -->
+            <!-- <p >{{ $hashes }}</p> -->
+          <!-- @if($cart)
+            <p>{{ $cart->totalQty }}</p>
+             @foreach($cart->items as $item)
+            <p>{{ $item->id }}</p>
+            <p>{{ $item->price }}</p>
+          @endforeach 
+          @endif -->
+
+          
+          @if(session('openCart'))
+            <input type="hidden" name="opencart" value="1" id="opencart">
+          @endif
+          </div>
+        
+
         <div class="container">
             <div class="row align-items-start">
                 <div class="catergories col-12 col-md-6 col-lg-2">
@@ -40,6 +60,7 @@
                             </a>
                         </div>
                         @endforeach
+                        
 
 
                         <!-- <div class="itemsContainer col-6 col-md-6 col-lg-4">

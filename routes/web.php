@@ -7,6 +7,7 @@ use App\Http\Controllers\auth\RegisterController;
 use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\user\ProfileController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\admin\AdminController;
 
 
 /*
@@ -22,6 +23,10 @@ use App\Http\Controllers\CheckoutController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('/', [HomeController::class, 'store']);
+
+Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+
+Route::get('/add-to-cart', [HomeController::class, 'getAddToCart'])->name('addToCart');
 
 Route::get('/account/profile', [ProfileController::class, 'index'])->name('profile');
 Route::post('/account/profile', [ProfileController::class, 'store']);

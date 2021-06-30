@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Address;
 
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class RegisterController extends Controller
 {
@@ -19,14 +20,22 @@ class RegisterController extends Controller
     
     public function index(Request $request){
 
+        $Cart = Session::has('cart') ? Session::get('cart') : null;
+
+        if($Cart){
+            $Cart = Json_decode(Session::get('cart'));
+        } else {
+            $Cart = false;
+        }
+
         if($request->checkout == 'true'){
          
-            return view('auth.register', ['status' => 1]);
+            return view('auth.register', ['status' => 1, 'cart' => $Cart]);
             
         }
         
        
-        return view('auth.register', ['status' => 0]);
+        return view('auth.register', ['status' => 0, 'cart' => $Cart]);
         
     }
 

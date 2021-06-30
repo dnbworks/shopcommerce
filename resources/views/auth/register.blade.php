@@ -1,5 +1,5 @@
 @extends('layout.layout')
-
+@section('title', 'register') 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('/css/style.css') }}">
 @endsection

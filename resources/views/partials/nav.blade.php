@@ -20,7 +20,12 @@
             </div>
             <div id="basket" class="cart" >
                 <span id="basket" ><i class="fas fa-shopping-basket" ></i></span>
+                @if($cart)
+                <span class="digit" >{{ $cart->totalQty }}</span>
+                @else
                 <span class="digit" >0</span>
+                @endif
+                
             </div>
             <div id="user" class="user" >
                 <a href="{{ route('login') }}"><i class="fas fa-user" ></i></a>
